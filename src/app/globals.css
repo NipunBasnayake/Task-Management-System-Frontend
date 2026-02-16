@@ -3,11 +3,8 @@
 :root {
   --page-bg: #f5f7f7;
   --surface: #ffffff;
-}
-
-@theme inline {
-  --font-sans: var(--font-plus-jakarta);
-  --font-mono: var(--font-jetbrains);
+  --font-plus-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-jetbrains: "JetBrains Mono", monospace;
 }
 
 * {

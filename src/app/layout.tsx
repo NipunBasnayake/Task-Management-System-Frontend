@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${plusJakartaSans.variable} ${jetBrainsMono.variable} min-h-screen bg-[var(--page-bg)] text-slate-900 antialiased`}
+        className={`${plusJakartaSans.variable} ${jetBrainsMono.variable} min-h-screen bg-(--page-bg) text-slate-900 antialiased`}
       >
         {children}
       </body>
