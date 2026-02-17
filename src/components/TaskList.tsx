@@ -107,7 +107,7 @@ export default function TaskList({ tasks, onDeleteTask }: TaskListProps) {
                     type="button"
                     onClick={() => handleDelete(task)}
                     disabled={deletingTaskId === task._id}
-                    className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:bg-red-300"
+                    className="rounded-md border border-red-400 text-red-600 px-3 py-1.5 text-sm transition hover:bg-red-50 hover:border-red-600 disabled:cursor-not-allowed disabled:bg-red-300"
                   >
                     {deletingTaskId === task._id ? "Deleting..." : "Delete"}
                   </button>
