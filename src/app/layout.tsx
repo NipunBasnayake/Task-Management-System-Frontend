@@ -15,10 +15,18 @@ const jetBrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Task Management System",
-    template: "%s | Task Management System",
+    default: "TaskFlow | Manage Your Tasks",
+    template: "%s | TaskFlow",
   },
   description: "A task management frontend built with Next.js.",
+  icons: {
+    icon: "/taskflow.ico",
+  },
+  openGraph: {
+    title: "TaskFlow | Manage Your Tasks",
+    description: "A task management frontend built with Next.js.",
+    images: ["/taskflow.ico"],
+  },
 };
 
 export default function RootLayout({

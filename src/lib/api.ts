@@ -222,8 +222,13 @@ export const api = {
     });
   },
 
-  async getTasks() {
-    const payload = await request<unknown>("/tasks", {
+  async getTasks(page: number = 1, limit: number = 10) {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+
+    const payload = await request<unknown>(`/tasks?${queryParams.toString()}`, {
       method: "GET",
     });
 

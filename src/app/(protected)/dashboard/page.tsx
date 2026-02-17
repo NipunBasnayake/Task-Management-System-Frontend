@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import ErrorBanner from "@/components/ErrorBanner";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Pagination from "@/components/Pagination";
 import TaskList from "@/components/TaskList";
 import { api } from "@/lib/api";
 import { getAuthErrorMessage } from "@/lib/auth";
@@ -12,9 +13,11 @@ import type { Task } from "@/types/task";
 import { Plus } from "lucide-react";
 
 export default function DashboardPage() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
 
   const loadTasks = async () => {
     setIsLoading(true);
@@ -22,7 +25,7 @@ export default function DashboardPage() {
 
     try {
       const nextTasks = await api.getTasks();
-      setTasks(nextTasks);
+      setAllTasks(nextTasks);
     } catch (loadError) {
       setError(getAuthErrorMessage(loadError, "Unable to load tasks."));
     } finally {
@@ -34,20 +37,33 @@ export default function DashboardPage() {
     void loadTasks();
   }, []);
 
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const currentTasks = allTasks.slice(indexOfFirstTask, indexOfLastTask);
+
   const onDeleteTask = async (taskId: string) => {
     if (!taskId || typeof taskId !== "string" || taskId.trim() === "") {
       setError("Cannot delete task: invalid ID");
       throw new Error("Invalid task ID");
     }
 
-    const previousTasks = tasks;
+    const previousTasks = allTasks;
 
-    setTasks((current) => current.filter((task) => task._id !== taskId));
+    setAllTasks((current) => {
+      const updated = current.filter((task) => task._id !== taskId);
+
+      const totalPages = Math.ceil(updated.length / tasksPerPage);
+      if (currentPage > totalPages && totalPages > 0) {
+        setCurrentPage(totalPages);
+      }
+
+      return updated;
+    });
 
     try {
       await api.deleteTask(taskId);
     } catch (deleteError) {
-      setTasks(previousTasks);
+      setAllTasks(previousTasks);
       setError(getAuthErrorMessage(deleteError, "Unable to delete task."));
       throw deleteError;
     }
@@ -88,7 +104,15 @@ export default function DashboardPage() {
           <LoadingSpinner label="Loading tasks..." />
         </div>
       ) : (
-        <TaskList tasks={tasks} onDeleteTask={onDeleteTask} />
+        <>
+          <TaskList tasks={currentTasks} onDeleteTask={onDeleteTask} />
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={tasksPerPage}
+            totalItems={allTasks.length}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
     </section>
   );

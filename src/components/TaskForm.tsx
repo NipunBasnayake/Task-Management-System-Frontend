@@ -154,7 +154,7 @@ export default function TaskForm({ mode, initialTask, onSubmitTask, onCancel }: 
             id="status"
             {...register("status")}
             disabled={isSubmitting}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition-colors focus:border-teal-600 focus:ring-2 focus:ring-teal-100"
           >
             {statusOptions.map((option) => (
               <option key={option.value} value={option.value}>
