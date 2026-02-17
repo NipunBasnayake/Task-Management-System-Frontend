@@ -1,16 +1,7 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
 import AuthGuard from "@/components/AuthGuard";
 import Navbar from "@/components/Navbar";
-import { hasLikelyAuthCookie } from "@/lib/auth";
 
-export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  if (!hasLikelyAuthCookie(cookieStore.getAll())) {
-    redirect("/login");
-  }
-
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <Navbar />

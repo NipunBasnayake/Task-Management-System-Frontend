@@ -3,7 +3,6 @@ import { ApiError } from "@/types/api";
 import type { Task, TaskPayload } from "@/types/task";
 
 const BaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log("API Base URL:", BaseUrl);
 const API_BASE_URL = (BaseUrl && BaseUrl.trim() ? BaseUrl : "/api").replace(
   /\/$/,
   "",
