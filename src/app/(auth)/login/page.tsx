@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,6 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 function LoginPageContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
@@ -41,8 +40,7 @@ function LoginPageContent() {
 
     try {
       await api.login(values);
-      router.replace("/dashboard");
-      router.refresh();
+      window.location.href = "/dashboard";
     } catch (submitError) {
       if (submitError instanceof ApiError && submitError.status === 401) {
         setError("Invalid email or password.");
@@ -58,7 +56,7 @@ function LoginPageContent() {
   return (
     <section className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <p className="text-xl font-semibold text-center text-teal-600 tracking-tight">
-          TaskFlow
+        TaskFlow
       </p>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold text-slate-900">Log in</h1>

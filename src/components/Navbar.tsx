@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "@/lib/api";
 
 export default function Navbar() {
-  const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -18,9 +16,7 @@ export default function Navbar() {
     } catch {
       // Logout endpoint is optional. Redirecting still clears protected access in the app.
     } finally {
-      router.replace("/login");
-      router.refresh();
-      setIsLoggingOut(false);
+      window.location.href = "/login";
     }
   };
 
