@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import ErrorBanner from "@/components/ErrorBanner";
@@ -13,7 +13,7 @@ type AuthGuardProps = {
   children: React.ReactNode;
 };
 
-export default function AuthGuard({ children }: AuthGuardProps) {
+function AuthGuardContent({ children }: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -86,4 +86,18 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   }
 
   return <>{children}</>;
+}
+
+export default function AuthGuard({ children }: AuthGuardProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-75 items-center justify-center">
+          <LoadingSpinner label="Loading session..." />
+        </div>
+      }
+    >
+      <AuthGuardContent>{children}</AuthGuardContent>
+    </Suspense>
+  );
 }
