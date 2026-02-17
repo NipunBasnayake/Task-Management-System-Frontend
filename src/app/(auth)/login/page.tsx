@@ -40,7 +40,10 @@ function LoginPageContent() {
 
     try {
       await api.login(values);
-      window.location.href = "/dashboard";
+      
+      const nextPath = searchParams.get("next");
+      const destination = nextPath && nextPath.startsWith("/") ? nextPath : "/dashboard";
+      window.location.href = destination;
     } catch (submitError) {
       if (submitError instanceof ApiError && submitError.status === 401) {
         setError("Invalid email or password.");

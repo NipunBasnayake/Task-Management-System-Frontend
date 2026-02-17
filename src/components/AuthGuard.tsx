@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import ErrorBanner from "@/components/ErrorBanner";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -15,6 +15,8 @@ type AuthGuardProps = {
 
 export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isChecking, setIsChecking] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCounter, setRetryCounter] = useState(0);
@@ -35,7 +37,10 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         }
 
         if (sessionError instanceof ApiError && sessionError.status === 401) {
-          router.replace("/login");
+          const params = new URLSearchParams();
+          const currentPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+          params.set("next", currentPath);
+          router.replace(`/login?${params.toString()}`);
           return;
         }
 
@@ -49,7 +54,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     return () => {
       isMounted = false;
     };
-  }, [retryCounter, router]);
+  }, [retryCounter, router, pathname, searchParams]);
 
   const retrySessionCheck = () => {
     setError(null);
